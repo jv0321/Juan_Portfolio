@@ -19,6 +19,7 @@ import {
   Cpu,
   Terminal,
   Lock,
+  ExternalLink,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -28,7 +29,7 @@ export default function Portfolio() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "about", "skills", "projects", "pricing", "contact"];
+      const sections = ["home", "about", "skills", "projects", "contact"];
       const currentSection = sections.find((section) => {
         const element = document.getElementById(section);
         if (element) {
@@ -54,7 +55,6 @@ export default function Portfolio() {
     { id: "contact", label: "Contact" },
   ];
 
-  // Updated Skills for the Graph
   const skills = [
     { name: "Cybersecurity (SOC)", level: 90 },
     { name: "Network Security", level: 85 },
@@ -67,36 +67,40 @@ export default function Portfolio() {
     { name: "Cloud Security", level: 75 },
   ];
 
-  const pricingPlans = [
+  // Projects imported from your GitHub README
+  const projects = [
     {
-      icon: Shield,
-      title: "Security Consultation",
-      price: "Custom",
-      duration: "audit-based",
-      features: [
-        "Vulnerability Assessments",
-        "Network Infrastructure Audit",
-        "Security Best Practices",
-        "Compliance Guidance",
-      ],
-      cta: "Secure Your Site",
+      title: "Phishing Email Detector",
+      description: "Python-based tool that analyzes email headers, URLs, and content to identify phishing attempts using pattern matching and threat intelligence.",
+      tech: ["Python", "Threat Intel", "Security Automation"],
+      link: "https://github.com/jv0321",
     },
     {
-      icon: Zap,
-      title: "Workflow Automation",
-      price: "Custom",
-      duration: "project-based",
-      features: [
-        "Python Scripting for Tasks",
-        "System Integration",
-        "CI/CD Pipeline Setup",
-        "Legacy Migration",
-      ],
-      cta: "Automate Now",
+      title: "Malware Analysis Sandbox",
+      description: "Documented malware behavior analysis lab using REMnux and FlareVM. Includes static and dynamic analysis reports on real malware samples.",
+      tech: ["REMnux", "FlareVM", "Incident Response"],
+      link: "https://github.com/jv0321",
+    },
+    {
+      title: "Splunk SIEM Alert Lab",
+      description: "Simulated SOC environment ingesting BOTS datasets. Includes custom detection rules, dashboards, and full incident response workflow.",
+      tech: ["Splunk", "SIEM", "Log Analysis"],
+      link: "https://github.com/jv0321",
+    },
+    {
+      title: "Network Threat Detection",
+      description: "Python script using Scapy/PyShark to detect IOCs in live or captured traffic including port scans and C2 beaconing patterns.",
+      tech: ["Python", "Scapy", "Wireshark"],
+      link: "https://github.com/jv0321",
+    },
+    {
+      title: "Vulnerability Assessment",
+      description: "Full assessment against Metasploitable and DVWA using Nessus. Includes risk-rated findings and remediation guidance.",
+      tech: ["Nessus", "Vulnerability Mgmt", "Risk Assessment"],
+      link: "https://github.com/jv0321",
     },
   ];
 
-  // Helper component for the Skill Graph
   const CircularNodeGraph = () => {
     const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
 
@@ -106,7 +110,6 @@ export default function Portfolio() {
         const height = Math.min(600, window.innerHeight - 200);
         setDimensions({ width, height });
       };
-
       updateDimensions();
       window.addEventListener("resize", updateDimensions);
       return () => window.removeEventListener("resize", updateDimensions);
@@ -128,7 +131,6 @@ export default function Portfolio() {
         >
           {skills.map((skill, index) => {
             const { x, y } = nodePositions[index];
-
             return (
               <g key={index}>
                 {skills.map((_, i) => {
@@ -137,25 +139,19 @@ export default function Portfolio() {
                     return (
                       <motion.line
                         key={`${index}-${i}`}
-                        x1={x}
-                        y1={y}
-                        x2={x2}
-                        y2={y2}
+                        x1={x} y1={y} x2={x2} y2={y2}
                         stroke="#64ffda"
                         strokeWidth="1"
-                        opacity="0.3"
-                        animate={{
-                          x1: [x, x + 3, x - 3, x],
-                          y1: [y, y - 3, y + 3, y],
-                        }}
-                        transition={{ duration: 10, repeat: Infinity, repeatType: "reverse" }}
+                        opacity="0.2"
+                        animate={{ x1: [x, x + 2, x], y1: [y, y - 2, y] }}
+                        transition={{ duration: 8, repeat: Infinity }}
                       />
                     );
                   }
                   return null;
                 })}
-                <circle cx={x} cy={y} r={8 + skill.level / 12} fill="#64ffda" />
-                <text x={x} y={y + 25} textAnchor="middle" fill="#ccd6f6" fontSize="11" fontWeight="bold">
+                <circle cx={x} cy={y} r={8 + skill.level / 15} fill="#64ffda" />
+                <text x={x} y={y + 25} textAnchor="middle" fill="#ccd6f6" fontSize="10" fontWeight="bold">
                   {skill.name}
                 </text>
               </g>
@@ -170,15 +166,15 @@ export default function Portfolio() {
     <div className="bg-[#0a192f] text-[#8892b0] min-h-screen font-sans">
       <header className="fixed w-full z-50 bg-[#0a192f]/80 backdrop-blur-sm">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <a href="#home" className="text-[#64ffda] font-bold text-lg md:text-xl">
-            Cybersecurity Analyst | Air Force Reserve
+          <a href="#home" className="text-[#64ffda] font-mono font-bold">
+            JV.SHIELD
           </a>
           <nav className="hidden md:flex space-x-8">
             {menuItems.map((item) => (
               <a
                 key={item.id}
                 href={`#${item.id}`}
-                className={`text-sm hover:text-[#64ffda] transition-colors ${
+                className={`text-xs font-mono hover:text-[#64ffda] transition-colors ${
                   activeSection === item.id ? "text-[#64ffda]" : ""
                 }`}
               >
@@ -187,26 +183,21 @@ export default function Portfolio() {
             ))}
           </nav>
           <button className="md:hidden text-[#64ffda]" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            Menu
+            <Terminal className="h-6 w-6" />
           </button>
         </div>
       </header>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
+            initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
             className="fixed inset-y-0 right-0 w-64 bg-[#112240] z-50 p-6 flex flex-col"
           >
-            <button className="self-end text-[#64ffda] mb-8" onClick={() => setIsMenuOpen(false)}>
-              Close
-            </button>
+            <button className="self-end text-[#64ffda] mb-8" onClick={() => setIsMenuOpen(false)}>Close</button>
             <nav className="flex flex-col space-y-6">
               {menuItems.map((item) => (
-                <a key={item.id} href={`#${item.id}`} className="text-lg" onClick={() => setIsMenuOpen(false)}>
+                <a key={item.id} href={`#${item.id}`} className="text-lg font-mono" onClick={() => setIsMenuOpen(false)}>
                   {item.label}
                 </a>
               ))}
@@ -216,138 +207,118 @@ export default function Portfolio() {
       </AnimatePresence>
 
       <main>
-        {/* Hero Section */}
         <section id="home" className="min-h-screen flex items-center">
           <div className="container mx-auto px-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <h2 className="text-[#64ffda] font-mono mb-4">Hi, my name is</h2>
-              <h1 className="text-5xl md:text-7xl font-bold text-[#ccd6f6] mb-4">
-                Juan Jose Vargas.
-              </h1>
-              <h3 className="text-4xl md:text-6xl font-bold text-[#8892b0] mb-8">
-                I protect digital landscapes.
-              </h3>
-              <p className="text-xl max-w-2xl mb-12">
-                Cybersecurity Analyst and Air Force Reservist specializing in Defensive Operations,
-                Network Security, and Technical Problem Solving. 
+              <h2 className="text-[#64ffda] font-mono mb-4">Establishing secure connection...</h2>
+              <h1 className="text-5xl md:text-7xl font-bold text-[#ccd6f6] mb-4">Juan Jose Vargas.</h1>
+              <h3 className="text-4xl md:text-6xl font-bold text-[#8892b0] mb-8">Defending Digital Assets.</h3>
+              <p className="text-lg max-w-2xl mb-12">
+                Cybersecurity Analyst and Air Force Reservist. I specialize in SOC operations, 
+                incident response, and building defensive automation.
               </p>
-              <a
-                href="#projects"
-                className="inline-flex items-center px-6 py-3 border border-[#64ffda] text-[#64ffda] hover:bg-[#64ffda]/10 transition-colors rounded"
-              >
-                View My Mission <ChevronRight className="ml-2 h-4 w-4" />
+              <a href="#projects" className="inline-flex items-center px-6 py-3 border border-[#64ffda] text-[#64ffda] hover:bg-[#64ffda]/10 transition-colors rounded font-mono text-sm">
+                GO TO PROJECTS <ChevronRight className="ml-2 h-4 w-4" />
               </a>
             </motion.div>
           </div>
         </section>
 
-        {/* About Section */}
         <section id="about" className="py-20">
           <div className="container mx-auto px-6">
             <h2 className="text-3xl font-bold text-[#ccd6f6] mb-12 flex items-center">
               <span className="text-[#64ffda] font-mono text-xl mr-2">01.</span> About Me
             </h2>
             <div className="grid md:grid-cols-2 gap-12">
-              <div className="space-y-4">
+              <div className="space-y-4 text-md">
                 <p>
-                  Multi-lingual professional and <strong>Air Force Reservist</strong> transitioning into <strong>Cybersecurity and Information Technology</strong>. I combine military-grade discipline with a Full Stack development background to protect digital infrastructure.
+                  I am an <strong>Air Force Reservist</strong> and <strong>Cybersecurity Analyst</strong> dedicated to mastering the art of defense. My transition from Full-Stack development to Security allows me to understand the code-level architecture of modern threats.
                 </p>
                 <p>
-                  As a 3E2 in the Air Force Reserve and a lifelong learner, I thrive in mission-critical environments. I specialize in identifying vulnerabilities and automating security workflows, leveraging my foundation in software engineering to understand the architecture of threats.
+                  Recently, I completed the <strong>Cybersecurity Analyst Bootcamp at UT Dallas</strong>, where I gained hands-on experience in log analysis, threat hunting, and vulnerability management.
                 </p>
                 <p>
-                  Currently pursuing a degree at <strong>Western Governors University</strong> and preparing for the <strong>CompTIA Security+</strong> certification, I am dedicated to mastering the tools of the trade—from SIEM platforms like Splunk to network analysis with Wireshark.
-                </p>
-                <p>
-                  Proficient in <strong>JavaScript, React, Python, and SQL</strong>, I am continuously expanding my knowledge in Defensive Security Operations (SOC), Cloud Security, and Incident Response.
+                  I thrive in mission-critical environments, combining military discipline with technical agility. Whether it's analyzing PCAPs or automating security alerts with Python, I am focused on minimizing risk and maximizing resilience.
                 </p>
               </div>
               <div className="relative group max-w-sm mx-auto">
                 <div className="absolute inset-0 border-2 border-[#64ffda] translate-x-4 translate-y-4 rounded group-hover:translate-x-2 group-hover:translate-y-2 transition-transform"></div>
-                <div className="relative aspect-square bg-[#64ffda] rounded overflow-hidden">
-                  <Image
-                    src="/images/IMG_6563.jpeg"
-                    alt="Juan Jose Vargas"
-                    fill
-                    className="object-cover grayscale hover:grayscale-0 transition-all duration-300"
-                  />
+                <div className="relative aspect-square bg-[#112240] rounded overflow-hidden">
+                  <Image src="/images/IMG_6563.jpeg" alt="Juan Jose Vargas" fill className="object-cover grayscale hover:grayscale-0 transition-all duration-300" />
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Skills Section */}
         <section id="skills" className="py-20 bg-[#112240]">
           <div className="container mx-auto px-6 text-center">
-            <h2 className="text-3xl font-bold text-[#ccd6f6] mb-8">Technical Proficiencies</h2>
+            <h2 className="text-3xl font-bold text-[#ccd6f6] mb-8">Defensive Skill Matrix</h2>
             <div className="flex justify-center">
-               <CircularNodeGraph />
+              <CircularNodeGraph />
             </div>
           </div>
         </section>
 
-        {/* Learning Section */}
-        <section id="learning" className="py-20">
+        <section id="projects" className="py-20">
           <div className="container mx-auto px-6">
-            <h2 className="text-3xl font-bold text-[#ccd6f6] mb-12">Current Education & Certifications</h2>
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  icon: Terminal,
-                  title: "WGU",
-                  description: "BS in Cybersecurity and Information Assurance. Focused on Network Security and Risk Management.",
-                },
-                {
-                  icon: Shield,
-                  title: "Security+",
-                  description: "Preparing for CompTIA Security+ certification to validate core security knowledge.",
-                },
-                {
-                  icon: Code,
-                  title: "Full Stack Mastery",
-                  description: "Rutgers Bootcamp Graduate with expertise in the MERN stack and Python automation.",
-                },
-              ].map((item, i) => (
-                <div key={i} className="bg-[#112240] p-8 rounded hover:-translate-y-2 transition-transform">
-                  <item.icon className="text-[#64ffda] h-10 w-10 mb-4" />
-                  <h3 className="text-xl font-bold text-[#ccd6f6] mb-2">{item.title}</h3>
-                  <p className="text-sm">{item.description}</p>
-                </div>
+            <h2 className="text-3xl font-bold text-[#ccd6f6] mb-12 flex items-center">
+              <span className="text-[#64ffda] font-mono text-xl mr-2">02.</span> Featured Labs
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {projects.map((project, index) => (
+                <motion.div 
+                  key={index} 
+                  whileHover={{ y: -5 }}
+                  className="bg-[#112240] p-8 rounded-lg flex flex-col h-full shadow-lg border border-transparent hover:border-[#64ffda]/30 transition-all"
+                >
+                  <div className="flex justify-between items-center mb-6">
+                    <Shield className="text-[#64ffda] h-8 w-8" />
+                    <div className="flex space-x-4">
+                      <a href={project.link} target="_blank" rel="noreferrer" className="text-[#8892b0] hover:text-[#64ffda]">
+                        <Github className="h-5 w-5" />
+                      </a>
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold text-[#ccd6f6] mb-3">{project.title}</h3>
+                  <p className="text-[#8892b0] text-sm mb-6 flex-grow">{project.description}</p>
+                  <div className="flex flex-wrap gap-2 mt-auto">
+                    {project.tech.map((t, i) => (
+                      <span key={i} className="text-[#64ffda] font-mono text-[10px] bg-[#64ffda]/10 px-2 py-1 rounded">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Contact Section */}
-        <section id="contact" className="py-20 text-center">
+        <section id="contact" className="py-32 text-center">
           <div className="container mx-auto px-6 max-w-2xl">
-            <h2 className="text-[#64ffda] font-mono mb-4">What's Next?</h2>
-            <h2 className="text-4xl md:text-5xl font-bold text-[#ccd6f6] mb-6">Get In Touch</h2>
-            <p className="mb-10">
-              I’m currently looking for new opportunities in Cybersecurity or IT roles. 
-              Whether you have a question or just want to say hi, my inbox is always open!
+            <h2 className="text-[#64ffda] font-mono mb-4 text-sm">03. End of Line</h2>
+            <h2 className="text-4xl font-bold text-[#ccd6f6] mb-6">Get In Touch</h2>
+            <p className="mb-10 text-[#8892b0]">
+              I'm actively seeking SOC Analyst or IT Security roles. 
+              If you have a project or a position that needs a disciplined defender, let's talk.
             </p>
-            <a
-              href="mailto:jjvargas1721@gmail.com"
-              className="inline-block px-10 py-4 border border-[#64ffda] text-[#64ffda] rounded hover:bg-[#64ffda]/10 transition-colors"
-            >
-              Contact Me
+            <a href="mailto:jjvargas1721@gmail.com" className="inline-block px-10 py-4 border border-[#64ffda] text-[#64ffda] rounded font-mono hover:bg-[#64ffda]/10 transition-colors">
+              ping @juanvargas
             </a>
-            
-            <div className="mt-12 flex justify-center space-x-8">
-                <a href="https://github.com/jv0321" className="hover:text-[#64ffda] transition-colors"><Github /></a>
-                <a href="https://www.linkedin.com/in/juan-jose-vargas-molina-55b504299/" className="hover:text-[#64ffda] transition-colors"><Linkedin /></a>
+            <div className="mt-16 flex justify-center space-x-8">
+              <a href="https://github.com/jv0321" target="_blank" rel="noreferrer" className="text-[#8892b0] hover:text-[#64ffda]"><Github /></a>
+              <a href="https://www.linkedin.com/in/juan-jose-vargas-molina-55b504299/" target="_blank" rel="noreferrer" className="text-[#8892b0] hover:text-[#64ffda]"><Linkedin /></a>
             </div>
           </div>
         </section>
       </main>
 
       <footer className="py-8 text-center border-t border-[#112240]">
-        <p className="text-xs font-mono">
-          Designed & Built by Juan Jose Vargas
+        <p className="text-[10px] font-mono text-[#495670]">
+          Built by Juan Jose Vargas | Protocol: Secure
         </p>
       </footer>
     </div>
   );
-} //
+}
