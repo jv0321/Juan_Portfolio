@@ -1,22 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   ChevronRight,
-  Github,
-  Linkedin,
-  Mail,
-  Book,
   Code,
   Shield,
-  Smartphone,
   Globe,
-  Users,
-  Check,
   Zap,
   Briefcase,
-  Cpu,
   Search,
   Terminal,
 } from "lucide-react";
@@ -53,7 +45,6 @@ export default function Portfolio() {
     { id: "contact", label: "Contact" },
   ];
 
-  // UPDATED: Shifted focus to SOC and Security Tools
   const skills = [
     { name: "Splunk / SIEM", level: 90 },
     { name: "Cybersecurity", level: 95 },
@@ -65,7 +56,8 @@ export default function Portfolio() {
     { name: "Process Optimization", level: 88 },
   ];
 
-  const pricingPlans = [
+  // Commented out to prevent build errors while unused
+  /* const pricingPlans = [
     {
       icon: Shield,
       title: "Security Consultation",
@@ -99,6 +91,7 @@ export default function Portfolio() {
       cta: "Automate Today",
     },
   ];
+  */
 
   const CircularNodeGraph = () => {
     const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
@@ -177,8 +170,6 @@ export default function Portfolio() {
         </div>
       </header>
 
-      {/* Mobile Menu logic remains same */}
-
       <main>
         {/* HERO SECTION */}
         <section id="home" className="min-h-screen flex items-center">
@@ -232,7 +223,7 @@ export default function Portfolio() {
           </div>
         </section>
 
-        {/* SKILLS GRAPH - Visual focus */}
+        {/* SKILLS GRAPH */}
         <section id="skills" className="py-24 bg-[#112240]">
            <div className="container mx-auto px-6">
              <h2 className="text-3xl font-bold text-[#ccd6f6] mb-8">Technical Proficiencies</h2>
@@ -240,7 +231,7 @@ export default function Portfolio() {
            </div>
         </section>
 
-        {/* PROJECTS SECTION - Updated with Cyber projects */}
+        {/* PROJECTS SECTION */}
         <section id="projects" className="py-24">
           <div className="container mx-auto px-6">
             <h2 className="text-3xl font-bold text-[#ccd6f6] mb-12 flex items-center">
@@ -310,7 +301,7 @@ export default function Portfolio() {
            </div>
         </section>
 
-        {/* SERVICES & CONTACT SECTION REMAINED SIMILAR BUT POLISHED */}
+        {/* CONTACT SECTION */}
         <section id="contact" className="py-24 text-center">
           <div className="container mx-auto px-6 max-w-2xl">
             <h2 className="text-4xl font-bold text-[#ccd6f6] mb-4">Get In Touch</h2>
